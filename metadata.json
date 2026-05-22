@@ -1,0 +1,6 @@
+{
+  "name": "AI Senior Engineer",
+  "description": "An elite autonomous code review, design architecture analyzer, and bug-hunting assistant powered by Gemini.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
