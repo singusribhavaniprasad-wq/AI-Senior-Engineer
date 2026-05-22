@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -52,13 +53,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                Scaffold(
+                Surface(
                     modifier = Modifier.fillMaxSize(),
-                    containerColor = Color(0xFF090B0E)
-                ) { innerPadding ->
-                    ReviewWorkspaceScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    color = Color(0xFF090B0E)
+                ) {
+                    ReviewWorkspaceScreen()
                 }
             }
         }
@@ -279,7 +278,8 @@ class CollisionRegistry {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 16.dp),
+                            .padding(horizontal = 16.dp)
+                            .testTag("workspace_lazy_column"),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         item {
@@ -978,7 +978,7 @@ fun ActiveReportPanel(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onBackClicked) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
                         tint = EliteColors.ElectricCyan
                     )
@@ -1052,7 +1052,7 @@ fun ActiveReportPanel(
         AnimatedContent(
             targetState = selectedSubTab,
             transitionSpec = {
-                slideInHorizontally { width -> if (targetState > initialState) width else -width } + fadeIn() with
+                slideInHorizontally { width -> if (targetState > initialState) width else -width } + fadeIn() togetherWith
                         slideOutHorizontally { width -> if (targetState > initialState) -width else width } + fadeOut()
             },
             modifier = Modifier

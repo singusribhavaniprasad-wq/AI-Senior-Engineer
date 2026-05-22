@@ -115,9 +115,9 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application) 
                 animationJob = launch {
                     var i = 0
                     while (true) {
-                        _loadingProgress.value = steps[i % steps.size]
+                        _loadingProgress.value = steps[i]
                         delay(2000)
-                        i++
+                        i = (i + 1) % steps.size
                     }
                 }
 
@@ -248,11 +248,11 @@ $codeSnippet
                     timestamp = System.currentTimeMillis()
                 )
 
-                withContext(Dispatchers.IO) {
-                    val insertedId = repository.insertReview(completedReview)
-                    val insertedReview = completedReview.copy(id = insertedId.toInt())
-                    _currentReport.value = insertedReview
+                val insertedId = withContext(Dispatchers.IO) {
+                    repository.insertReview(completedReview)
                 }
+                val insertedReview = completedReview.copy(id = insertedId.toInt())
+                _currentReport.value = insertedReview
 
             } catch (e: Throwable) {
                 e.printStackTrace()
