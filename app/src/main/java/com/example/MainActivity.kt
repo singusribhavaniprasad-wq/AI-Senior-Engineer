@@ -3,6 +3,7 @@ package com.example
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.*
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.data.CodeReview
 import com.example.ui.theme.MyApplicationTheme
@@ -88,11 +90,11 @@ fun ReviewWorkspaceScreen(
     val clipboardManager = LocalClipboardManager.current
 
     // UI state streams from ViewModel
-    val historyList by viewModel.historyList.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val loadingProgress by viewModel.loadingProgress.collectAsState()
-    val currentReport by viewModel.currentReport.collectAsState()
-    val errorMsg by viewModel.error.collectAsState()
+    val historyList by viewModel.historyList.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val loadingProgress by viewModel.loadingProgress.collectAsStateWithLifecycle()
+    val currentReport by viewModel.currentReport.collectAsStateWithLifecycle()
+    val errorMsg by viewModel.error.collectAsStateWithLifecycle()
 
     // Form inputs state
     var selectedLanguage by remember { mutableStateOf("Kotlin") }
@@ -196,10 +198,20 @@ class CollisionRegistry {
         }
     }
 
+    // Intercept hardware and gesture back presses to steer inner-state navigation
+    BackHandler(enabled = currentReport != null || currentTab != 0) {
+        if (currentReport != null) {
+            viewModel.resetReport()
+            currentTab = 0
+        } else if (currentTab != 0) {
+            currentTab = 0
+        }
+    }
+
     // Monitor API key
     val isApiKeyPresent = remember {
-        val key = com.example.BuildConfig.GEMINI_API_KEY
-        key.isNotEmpty() && key != "MY_GEMINI_API_KEY"
+        val key = try { com.example.BuildConfig.GEMINI_API_KEY } catch (e: Throwable) { null }
+        !key.isNullOrEmpty() && key != "MY_GEMINI_API_KEY"
     }
 
     // Main layout
@@ -521,8 +533,12 @@ class CollisionRegistry {
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     TextButton(
                                         onClick = {
-                                            clipboardManager.getText()?.let {
-                                                codeSnippet = it.text
+                                            try {
+                                                clipboardManager.getText()?.let {
+                                                    codeSnippet = it.text
+                                                }
+                                            } catch (e: Throwable) {
+                                                Toast.makeText(context, "Cannot read clipboard: Access restricted", Toast.LENGTH_SHORT).show()
                                             }
                                         },
                                         contentPadding = PaddingValues(horizontal = 6.dp, vertical = 2.dp)
@@ -583,13 +599,16 @@ class CollisionRegistry {
                                         codeSnippet
                                     )
                                 },
+                                enabled = !isLoading,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(52.dp)
                                     .testTag("submit_review_button"),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = EliteColors.ElectricCyan,
-                                    contentColor = Color.Black
+                                    contentColor = Color.Black,
+                                    disabledContainerColor = EliteColors.ElectricCyan.copy(alpha = 0.3f),
+                                    disabledContentColor = Color.Black.copy(alpha = 0.4f)
                                 ),
                                 shape = RoundedCornerShape(10.dp)
                             ) {
@@ -609,6 +628,7 @@ class CollisionRegistry {
                 1 -> {
                     // TAB 1: REPORT COMPREHENSIVE SHEET & LOADER
                     Box(modifier = Modifier.fillMaxSize()) {
+                        val report = currentReport
                         when {
                             isLoading -> {
                                 LoadingAuditDashboard(loadingProgress)
@@ -650,9 +670,9 @@ class CollisionRegistry {
                                     }
                                 }
                             }
-                            currentReport != null -> {
+                            report != null -> {
                                 ActiveReportPanel(
-                                    review = currentReport!!,
+                                    review = report,
                                     viewModel = viewModel,
                                     onBackClicked = { viewModel.resetReport(); currentTab = 0 }
                                 )
@@ -777,7 +797,7 @@ class CollisionRegistry {
                                     .fillMaxWidth(),
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                items(historyList) { item ->
+                                items(historyList, key = { it.id }) { item ->
                                     HistoryLogItemCard(
                                         review = item,
                                         onSelected = {
@@ -983,8 +1003,12 @@ fun ActiveReportPanel(
 
             IconButton(
                 onClick = {
-                    clipboardManager.setText(AnnotatedString(review.reportContent))
-                    Toast.makeText(context, "Full Markdown Report Copied!", Toast.LENGTH_SHORT).show()
+                    try {
+                        clipboardManager.setText(AnnotatedString(review.reportContent))
+                        Toast.makeText(context, "Full Markdown Report Copied!", Toast.LENGTH_SHORT).show()
+                    } catch (e: Throwable) {
+                        Toast.makeText(context, "Cannot copy: Access restricted", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 modifier = Modifier.testTag("copy_markdown_report_button")
             ) {
@@ -1002,10 +1026,12 @@ fun ActiveReportPanel(
             containerColor = EliteColors.DeckBackground,
             contentColor = EliteColors.ElectricCyan,
             indicator = { tabPositions ->
-                TabRowDefaults.SecondaryIndicator(
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedSubTab]),
-                    color = EliteColors.ElectricCyan
-                )
+                if (tabPositions.isNotEmpty() && selectedSubTab in tabPositions.indices) {
+                    TabRowDefaults.SecondaryIndicator(
+                        modifier = Modifier.tabIndicatorOffset(tabPositions[selectedSubTab]),
+                        color = EliteColors.ElectricCyan
+                    )
+                }
             }
         ) {
             Tab(
@@ -1302,97 +1328,136 @@ fun HistoryLogItemCard(
 }
 
 // Custom simple Line Parser for Markdown representation in Compose
+sealed interface MarkdownNode {
+    data class Header(val level: Int, val text: String) : MarkdownNode
+    data class ListItem(val text: String) : MarkdownNode
+    data class CodeBlock(val code: String, val language: String) : MarkdownNode
+    data class Paragraph(val text: String) : MarkdownNode
+}
+
+fun parseMarkdown(text: String): List<MarkdownNode> {
+    val nodes = mutableListOf<MarkdownNode>()
+    val lines = text.split("\n")
+    var inCode = false
+    var currentCodeLanguage = ""
+    val currentCodeLines = mutableListOf<String>()
+
+    for (line in lines) {
+        val trimmed = line.trim()
+        if (trimmed.startsWith("```")) {
+            if (inCode) {
+                nodes.add(MarkdownNode.CodeBlock(currentCodeLines.joinToString("\n"), currentCodeLanguage))
+                currentCodeLines.clear()
+                inCode = false
+                currentCodeLanguage = ""
+            } else {
+                currentCodeLanguage = trimmed.removePrefix("```").trim()
+                inCode = true
+            }
+        } else if (inCode) {
+            currentCodeLines.add(line)
+        } else {
+            when {
+                trimmed.startsWith("# ") -> {
+                    nodes.add(MarkdownNode.Header(1, trimmed.removePrefix("# ")))
+                }
+                trimmed.startsWith("## ") -> {
+                    nodes.add(MarkdownNode.Header(2, trimmed.removePrefix("## ")))
+                }
+                trimmed.startsWith("### ") -> {
+                    nodes.add(MarkdownNode.Header(3, trimmed.removePrefix("### ")))
+                }
+                trimmed.startsWith("- ") || trimmed.trim().startsWith("* ") -> {
+                    nodes.add(MarkdownNode.ListItem(line.trim().removePrefix("- ").removePrefix("* ").trim()))
+                }
+                trimmed.isEmpty() -> {
+                    // Ignore empty spacing line
+                }
+                else -> {
+                    nodes.add(MarkdownNode.Paragraph(line))
+                }
+            }
+        }
+    }
+    if (inCode && currentCodeLines.isNotEmpty()) {
+        nodes.add(MarkdownNode.CodeBlock(currentCodeLines.joinToString("\n"), currentCodeLanguage))
+    }
+    return nodes
+}
+
 @Composable
 fun MarkdownViewer(markdownText: String) {
-    val lines = markdownText.split("\n")
-    val codeLines = remember { mutableStateListOf<String>() }
-    var inCodeBlock by remember { mutableStateOf(false) }
-    var codeLanguage by remember { mutableStateOf("") }
+    val nodes = remember(markdownText) { parseMarkdown(markdownText) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        for (line in lines) {
-            val trimmed = line.trim()
-            if (trimmed.startsWith("```")) {
-                if (inCodeBlock) {
-                    // End previous block & Render it!
-                    CodePreviewCard(code = codeLines.joinToString("\n"), language = codeLanguage)
-                    codeLines.clear()
-                    inCodeBlock = false
-                    codeLanguage = ""
-                } else {
-                    // Start of code block
-                    codeLanguage = trimmed.removePrefix("```").trim()
-                    inCodeBlock = true
+        nodes.forEach { node ->
+            when (node) {
+                is MarkdownNode.Header -> {
+                    val style = when (node.level) {
+                        1 -> MaterialTheme.typography.headlineLarge
+                        2 -> MaterialTheme.typography.titleLarge
+                        else -> MaterialTheme.typography.titleMedium
+                    }
+                    val color = when (node.level) {
+                        1 -> EliteColors.ElectricCyan
+                        2 -> EliteColors.ElectricCyan
+                        else -> Color(0xFFD2F7FF)
+                    }
+                    val fontWeight = when (node.level) {
+                        1, 2 -> FontWeight.Bold
+                        else -> FontWeight.SemiBold
+                    }
+                    val topPadding = when (node.level) {
+                        1 -> 18.dp
+                        2 -> 14.dp
+                        else -> 10.dp
+                    }
+                    val bottomPadding = when (node.level) {
+                        1 -> 4.dp
+                        2 -> 4.dp
+                        else -> 2.dp
+                    }
+                    Text(
+                        text = node.text,
+                        style = style,
+                        color = color,
+                        fontWeight = fontWeight,
+                        modifier = Modifier.padding(top = topPadding, bottom = bottomPadding)
+                    )
                 }
-            } else if (inCodeBlock) {
-                codeLines.add(line)
-            } else {
-                when {
-                    trimmed.startsWith("# ") -> {
+                is MarkdownNode.ListItem -> {
+                    Row(
+                        modifier = Modifier.padding(start = 6.dp, top = 1.dp, bottom = 1.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
                         Text(
-                            text = trimmed.removePrefix("# "),
-                            style = MaterialTheme.typography.headlineLarge,
-                            color = EliteColors.ElectricCyan,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 18.dp, bottom = 4.dp)
-                        )
-                    }
-                    trimmed.startsWith("## ") -> {
-                        Text(
-                            text = trimmed.removePrefix("## "),
-                            style = MaterialTheme.typography.titleLarge,
-                            color = EliteColors.ElectricCyan,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 14.dp, bottom = 4.dp)
-                        )
-                    }
-                    trimmed.startsWith("### ") -> {
-                        Text(
-                            text = trimmed.removePrefix("### "),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color(0xFFD2F7FF),
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.padding(top = 10.dp, bottom = 2.dp)
-                        )
-                    }
-                    trimmed.startsWith("- ") || trimmed.startsWith("* ") -> {
-                        Row(
-                            modifier = Modifier.padding(start = 6.dp, top = 1.dp, bottom = 1.dp),
-                            verticalAlignment = Alignment.Top
-                        ) {
-                            Text(
-                                text = "• ",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = EliteColors.ElectricCyan,
-                                fontWeight = FontWeight.Black
-                            )
-                            Text(
-                                text = line.removePrefix("- ").removePrefix("* ").trim(),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = EliteColors.BodyText
-                            )
-                        }
-                    }
-                    trimmed.isEmpty() -> {
-                        Spacer(modifier = Modifier.height(3.dp))
-                    }
-                    else -> {
-                        Text(
-                            text = line,
+                            text = "• ",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFFE2E8F0),
-                            lineHeight = 20.sp
+                            color = EliteColors.ElectricCyan,
+                            fontWeight = FontWeight.Black
+                        )
+                        Text(
+                            text = node.text,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = EliteColors.BodyText
                         )
                     }
+                }
+                is MarkdownNode.CodeBlock -> {
+                    CodePreviewCard(code = node.code, language = node.language)
+                }
+                is MarkdownNode.Paragraph -> {
+                    Text(
+                        text = node.text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFFE2E8F0),
+                        lineHeight = 20.sp
+                    )
                 }
             }
-        }
-        // Fallback for dangling open-ended code blocks
-        if (inCodeBlock && codeLines.isNotEmpty()) {
-            CodePreviewCard(code = codeLines.joinToString("\n"), language = codeLanguage)
         }
     }
 }
@@ -1428,8 +1493,12 @@ fun CodePreviewCard(code: String, language: String) {
                 )
                 IconButton(
                     onClick = {
-                        clipboardManager.setText(AnnotatedString(code))
-                        Toast.makeText(context, "Code copied to clipboard!", Toast.LENGTH_SHORT).show()
+                        try {
+                            clipboardManager.setText(AnnotatedString(code))
+                            Toast.makeText(context, "Code copied to clipboard!", Toast.LENGTH_SHORT).show()
+                        } catch (e: Throwable) {
+                            Toast.makeText(context, "Cannot copy code: Access restricted", Toast.LENGTH_SHORT).show()
+                        }
                     },
                     modifier = Modifier.size(24.dp)
                 ) {

@@ -13,6 +13,7 @@ import com.example.data.AppDatabase
 import com.example.data.CodeReview
 import com.example.data.CodeReviewRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -85,6 +86,8 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application) 
         reviewMode: String,
         codeSnippet: String
     ) {
+        if (_isLoading.value) return
+
         if (codeSnippet.trim().isEmpty()) {
             _error.value = "Please enter some code to review."
             return
@@ -95,6 +98,7 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application) 
             _error.value = null
             _currentReport.value = null
 
+            var animationJob: Job? = null
             try {
                 // High-fidelity progressive engineering steps
                 val steps = listOf(
@@ -108,7 +112,7 @@ class ReviewViewModel(application: Application) : AndroidViewModel(application) 
                     "Polishing Developer DNA & Reviewer profiles..."
                 )
 
-                val animationJob = launch {
+                animationJob = launch {
                     var i = 0
                     while (true) {
                         _loadingProgress.value = steps[i % steps.size]
@@ -210,8 +214,8 @@ $codeSnippet
                     generationConfig = GenerationConfig(temperature = 0.2f)
                 )
 
-                val apiKey = BuildConfig.GEMINI_API_KEY
-                if (apiKey.isEmpty() || apiKey == "MY_GEMINI_API_KEY") {
+                val apiKey = try { BuildConfig.GEMINI_API_KEY } catch (e: Throwable) { null }
+                if (apiKey.isNullOrEmpty() || apiKey == "MY_GEMINI_API_KEY") {
                     throw IllegalStateException("API Key is missing or default. Reference 'Secrets' panel in AI Studio sidebar to add your GEMINI_API_KEY.")
                 }
 
@@ -250,10 +254,11 @@ $codeSnippet
                     _currentReport.value = insertedReview
                 }
 
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 e.printStackTrace()
                 _error.value = "Review Failed: ${e.localizedMessage ?: "Unknown network error"}"
             } finally {
+                animationJob?.cancel()
                 _isLoading.value = false
                 _loadingProgress.value = ""
             }
@@ -289,7 +294,7 @@ $codeSnippet
                     }
                 }
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             e.printStackTrace()
         }
         return ReviewScores(
@@ -310,7 +315,7 @@ $codeSnippet
                 val endIdx = text.indexOf(endTag) + endTag.length
                 text.removeRange(startIdx, endIdx).trim()
             } else text
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             text
         }
     }
