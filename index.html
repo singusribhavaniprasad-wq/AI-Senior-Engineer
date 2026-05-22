@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Senior Engineer - Elite Architect & Bug-Destructor Suite</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Marked Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- PrismJS Syntax Highlighter -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-kotlin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        elite: {
+                            bg: '#090B0E',
+                            deck: '#0F1218',
+                            studio: '#07090C',
+                            cyan: '#00F2FE',
+                            teal: '#00D1FF',
+                            purple: '#9F2BFF',
+                            green: '#10B981',
+                            amber: '#FBBF24',
+                            red: '#EF4444',
+                            gutter: '#1E293B',
+                            slateLight: '#94A3B8',
+                            bodyText: '#CBD5E1'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090B0E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00D1FF;
+        }
+        .glossy-gradient {
+            background: radial-gradient(circle at top left, rgba(0, 242, 254, 0.08), transparent 50%),
+                        radial-gradient(circle at bottom right, rgba(159, 43, 255, 0.05), transparent 50%);
+        }
+        .pulse-shadow-cyan:focus {
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+        }
+    </style>
+</head>
+<body class="bg-elite-bg text-elite-bodyText scroll-smooth glossy-gradient min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+    <!-- Top Bar Navigation -->
+    <header class="border-b border-elite-gutter bg-elite-deck/90 backdrop-blur-md sticky top-0 z-30 px-6 py-4 transition-all">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-elite-cyan/15 border border-elite-cyan rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(0,242,254,0.15)] animate-pulse">
+                    <i data-lucide="cpu" class="w-5 h-5 text-elite-cyan"></i>
+                </div>
+                <div>
+                    <h1 class="text-white text-lg font-black tracking-wider flex items-center gap-2">
+                        AI SENIOR ENGINEER <span class="bg-elite-cyan/10 text-elite-cyan border border-elite-cyan/20 px-2 py-0.5 rounded text-[10px] tracking-widest font-mono">WEB PRO</span>
+                    </h1>
+                    <p class="text-[10px] font-bold text-elite-slateLight tracking-widest uppercase">Elite Architect & Bug-Destructor Suite</p>
+                </div>
+            </div>
+
+            <!-- Header Controls -->
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <button onclick="openHistoryModal()" class="flex items-center gap-2 bg-elite-gutter/60 hover:bg-elite-gutter text-sm font-semibold px-4 py-2 border border-elite-gutter/80 rounded-lg text-white transition-all">
+                    <i data-lucide="history" class="w-4 h-4 text-elite-teal"></i>
+                    <span>Review History</span>
+                    <span id="history-badge" class="bg-elite-teal/15 text-elite-teal px-1.5 py-0.5 text-xs rounded-md border border-elite-teal/20 ml-1 font-mono">0</span>
+                </button>
+
+                <button onclick="openSettingsModal()" id="key-status-btn" class="flex items-center gap-2 bg-elite-red/10 hover:bg-elite-red/15 text-xs font-semibold px-4 py-2 border border-elite-red/30 rounded-lg text-elite-red transition-all">
+                    <i data-lucide="key-round" class="w-4 h-4 animate-bounce"></i>
+                    <span id="key-status-label">API Key: Offline</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Dashboard Grid -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Input Panel: Workspace Parameters (5 columns) -->
+        <section class="lg:col-span-5 bg-elite-deck border border-elite-gutter rounded-xl p-5 shadow-2xl flex flex-col gap-6 relative">
+            
+            <!-- Header section -->
+            <div class="flex items-center justify-between border-b border-elite-gutter pb-4">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="sliders" class="w-5 h-5 text-elite-cyan"></i>
+                    <h2 class="text-white font-bold text-md tracking-wider">Workspace Deck</h2>
+                </div>
+                <button onclick="clearWorkspace()" class="text-xs font-semibold text-elite-slateLight hover:text-elite-cyan flex items-center gap-1 transition-all">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear Panel
+                </button>
+            </div>
+
+            <!-- Form parameters selector -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Proj Language -->
+                <div>
+                    <label class="block text-xs font-bold text-elite-slateLight mb-2 uppercase tracking-wider">Language</label>
+                    <select id="select-language" class="w-full bg-elite-studio text-white text-sm border border-elite-gutter rounded-lg px-3 py-2.5 outline-none pulse-shadow-cyan focus:border-elite-cyan transition-all">
+                        <option value="Kotlin" selected>Kotlin</option>
+                        <option value="Java">Java</option>
+                        <option value="Python">Python</option>
+                        <option value="TypeScript">TypeScript</option>
+                        <option value="C++">C++</option>
+                        <option value="Rust">Rust</option>
+                        <option value="Go">Go</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="SQL">SQL</option>
+                    </select>
+                </div>
+
+                <!-- Project Context -->
+                <div>
+                    <label class="block text-xs font-bold text-elite-slateLight mb-2 uppercase tracking-wider">Project Type</label>
+                    <select id="select-project-type" class="w-full bg-elite-studio text-white text-sm border border-elite-gutter rounded-lg px-3 py-2.5 outline-none pulse-shadow-cyan focus:border-elite-cyan transition-all">
+                        <option value="Android App" selected>Android App</option>
+                        <option value="Web Service/API">Web Service/API</option>
+                        <option value="Web App">Web App</option>
+                        <option value="Library">Library</option>
+                        <option value="Smart Contract">Smart Contract</option>
+                        <option value="CLI Dev">CLI Dev</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Review Modes Option Grid -->
+            <div>
+                <label class="block text-xs font-bold text-elite-slateLight mb-3 uppercase tracking-wider">Review Mode Riggs</label>
+                <div class="grid grid-cols-1 gap-2.5" id="review-modes-container">
+                    <!-- Dynamic review modes injected by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Code Input Terminal Header -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block text-xs font-bold text-elite-slateLight uppercase tracking-wider">Buggy / Critical Code Snippet</label>
+                    <span class="text-[10px] font-mono text-elite-slateLight">MONOSPACE WRAP</span>
+                </div>
+                <!-- Actual Editor textarea -->
+                <div class="relative bg-elite-studio border border-elite-gutter rounded-xl overflow-hidden focus-within:border-elite-cyan transition-all">
+                    <!-- Line decoration bar -->
+                    <div class="absolute left-0 top-0 bottom-0 w-11 bg-elite-deck/40 border-r border-elite-gutter flex flex-col items-center py-4 text-[10px] font-mono select-none text-elite-slateLight/50 gap-1.5 leading-5 text-right pr-2">
+                        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+                    </div>
+                    <textarea id="code-terminal" placeholder="Paste or type a buggy or critical code block here to run architectural and bug-destruction review audits..." class="w-full pl-14 pr-4 py-4 min-h-[220px] max-h-[350px] bg-transparent text-slate-100 font-mono text-xs leading-5 outline-none resize-y"></textarea>
+                </div>
+            </div>
+
+            <!-- Prompt templates selector -->
+            <div>
+                <span class="block text-xs font-bold text-elite-slateLight mb-2.5 uppercase tracking-wider">Demos & Vulnerability Explanations</span>
+                <div class="flex flex-col gap-2">
+                    <button onclick="loadTemplate(0)" class="text-left w-full bg-elite-studio hover:bg-elite-gutter/40 p-2.5 rounded-lg border border-elite-gutter text-xs transition-all flex items-center justify-between text-white">
+                        <span class="flex items-center gap-2"><i data-lucide="shield-alert" class="w-4 h-4 text-elite-red"></i> SQL Injection Leak</span>
+                        <span class="text-[10px] bg-elite-red/10 text-elite-red px-1.5 py-0.5 rounded border border-elite-red/20 font-bold uppercase">Security</span>
+                    </button>
+                    <button onclick="loadTemplate(1)" class="text-left w-full bg-elite-studio hover:bg-elite-gutter/40 p-2.5 rounded-lg border border-elite-gutter text-xs transition-all flex items-center justify-between text-white">
+                        <span class="flex items-center gap-2"><i data-lucide="archive-restore" class="w-4 h-4 text-elite-amber"></i> Context Activity Leak</span>
+                        <span class="text-[10px] bg-elite-amber/10 text-elite-amber px-1.5 py-0.5 rounded border border-elite-amber/20 font-bold uppercase">Bug Hunter</span>
+                    </button>
+                    <button onclick="loadTemplate(2)" class="text-left w-full bg-elite-studio hover:bg-elite-gutter/40 p-2.5 rounded-lg border border-elite-gutter text-xs transition-all flex items-center justify-between text-white">
+                        <span class="flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 text-elite-purple"></i> Race Condition Crash</span>
+                        <span class="text-[10px] bg-elite-purple/10 text-elite-purple px-1.5 py-0.5 rounded border border-elite-purple/20 font-bold uppercase">FAANG Strict</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Run Button Action -->
+            <button onclick="triggerCodeReview()" class="w-full py-4 px-6 bg-gradient-to-r from-elite-cyan to-elite-teal hover:from-elite-teal hover:to-elite-cyan text-elite-bg font-black rounded-lg text-sm tracking-widest uppercase shadow-[0_0_20px_rgba(0,242,254,0.3)] hover:shadow-[0_0_30px_rgba(0,242,254,0.45)] transition-all flex items-center justify-center gap-2">
+                <i data-lucide="shield-check" class="w-5 h-5"></i> Execute Review Action
+            </button>
+
+        </section>
+
+        <!-- Right Result Panel: Workspace Visual Logs & Reports (7 columns) -->
+        <section class="lg:col-span-7 bg-custom flex flex-col gap-6">
+
+            <!-- 1. IDEAL STATE WRAP (Empty desk) -->
+            <div id="panel-idle" class="bg-elite-deck border border-elite-gutter rounded-xl p-8 text-center text-elite-slateLight flex flex-col items-center justify-center gap-6 min-h-[640px]">
+                <div class="w-20 h-20 bg-elite-gutter/30 border border-elite-gutter/80 rounded-2xl flex items-center justify-center relative">
+                    <i data-lucide="terminal" class="w-10 h-10 text-elite-teal/80"></i>
+                    <div class="absolute -top-1 -right-1 w-4.5 h-4.5 bg-elite-cyan rounded-full border-2 border-elite-deck flex items-center justify-center text-[8px] font-bold text-elite-bg">i</div>
+                </div>
+                <div class="max-w-md">
+                    <h3 class="text-white text-lg font-bold mb-2">Audit Desk Idle</h3>
+                    <p class="text-xs text-elite-slateLight/80 leading-5">Welcome to the AI Senior Engineer Audit workspace. Provide a snippet of coding logic in the Workspace Panel, pick your architectural criteria rules, and execute review evaluations.</p>
+                </div>
+
+                <div class="w-full max-w-sm grid grid-cols-2 gap-4 border-t border-elite-gutter pt-6 mt-2">
+                    <div class="text-left bg-elite-studio p-3 rounded-lg border border-elite-gutter">
+                        <span class="block text-[10px] font-bold text-elite-slateLight/60 tracking-wider uppercase">Vulnerability Audits</span>
+                        <span class="text-white text-sm font-bold mt-1 block">SQLi, Context & Races</span>
+                    </div>
+                    <div class="text-left bg-elite-studio p-3 rounded-lg border border-elite-gutter">
+                        <span class="block text-[10px] font-bold text-elite-slateLight/60 tracking-wider uppercase">Simulated Swe</span>
+                        <span class="text-white text-sm font-bold mt-1 block">Google, Startup CTO & Hunter</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. HIGH-FIDELITY LOADING SCREEN PANEL -->
+            <div id="panel-loading" class="hidden bg-elite-deck border border-elite-gutter rounded-xl p-8 flex flex-col items-center justify-center justify-items-center gap-6 min-h-[640px]">
+                <!-- Outer progressive loader animation -->
+                <div class="relative w-36 h-36 flex items-center justify-center">
+                    <!-- Rotating track circles -->
+                    <div class="absolute inset-0 border-4 border-dashed border-elite-gutter rounded-full animate-spin [animation-duration:15s]"></div>
+                    <div class="absolute inset-2 border-4 border-elite-cyan/20 rounded-full"></div>
+                    <div class="absolute inset-2 border-t-4 border-elite-cyan rounded-full animate-spin [animation-duration:1.5s]"></div>
+                    <!-- Pulser icon inside -->
+                    <div class="w-20 h-20 bg-elite-studio border border-elite-gutter rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(0,242,254,0.15)] animate-pulse">
+                        <i data-lucide="brain-circuit" class="w-10 h-10 text-elite-cyan"></i>
+                    </div>
+                </div>
+
+                <div class="text-center max-w-md">
+                    <span class="bg-elite-cyan/10 text-elite-cyan border border-elite-cyan/20 px-3 py-1 rounded text-xs font-mono font-bold tracking-widest uppercase">DECONSTRUCTING CODE NODE</span>
+                    <h3 id="progress-indicator-text" class="text-white text-md font-bold mt-4 font-mono">Initializing Elite Review Deck...</h3>
+                    <p class="text-[11px] text-elite-slateLight mt-2 font-mono">Running deep architectural, security vulnerabilities, and code optimizations reviews over the network container...</p>
+                </div>
+            </div>
+
+            <!-- 3. REVIEW BOARD PANEL (The generated report cards) -->
+            <div id="panel-results" class="hidden flex flex-col gap-6">
+
+                <!-- Scoring deck summary header -->
+                <div class="bg-elite-deck border border-elite-gutter rounded-xl p-5 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-5 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-48 h-48 bg-radial-gradient from-elite-cyan/5 to-transparent rounded-full -mr-16 -mt-16 pointer-events-none"></div>
+                    
+                    <div class="text-center sm:text-left">
+                        <span id="result-meta-mode" class="bg-elite-purple/10 text-elite-purple border border-elite-purple/20 px-2 py-0.5 rounded text-[10px] tracking-wider font-bold">FAANG Review Mode</span>
+                        <h2 id="result-title" class="text-white font-extrabold text-lg mt-1 tracking-wider">Kotlin Android App Review</h2>
+                        <p class="text-xs text-elite-slateLight font-mono mt-0.5" id="result-timestamp">Timestamp log: 2026-05-22 08:50</p>
+                    </div>
+
+                    <!-- Computed Total Circular Score Meter -->
+                    <div class="flex items-center gap-4 bg-elite-studio/80 border border-elite-gutter px-5 py-3.5 rounded-xl">
+                        <div>
+                            <span class="block text-[10px] font-bold text-elite-slateLight tracking-widest uppercase">Overall Score</span>
+                            <span class="text-white text-xs font-semibold" id="score-description">Production Ready</span>
+                        </div>
+                        <div class="relative w-16 h-16 flex items-center justify-center bg-elite-deck rounded-full border-2 border-elite-gutter shadow-inner">
+                            <span id="score-meter-text" class="text-white text-xl font-black font-mono">9.4</span>
+                            <span class="text-[9px] font-bold text-elite-slateLight/60 absolute bottom-1.5 font-mono">/ 10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 Criteria Ratings Progress Bars -->
+                <div class="bg-elite-deck border border-elite-gutter rounded-xl p-5 shadow-2xl">
+                    <div class="flex items-center gap-2 mb-4 border-b border-elite-gutter pb-3">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-elite-teal"></i>
+                        <h3 class="text-white text-xs font-bold tracking-wider uppercase">Fidelity Metrics Criteria Ratings</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Code Quality -->
+                        <div>
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="font-semibold text-elite-bodyText flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-elite-cyan"></span> Code Quality</span>
+                                <span id="bar-val-q" class="font-mono font-bold text-white bg-elite-cyan/10 text-elite-cyan px-1.5 py-0.5 rounded text-[10px] border border-elite-cyan/15">8/10</span>
+                            </div>
+                            <div class="w-full bg-elite-studio h-2 rounded-full overflow-hidden border border-elite-gutter">
+                                <div id="bar-fill-q" class="bg-elite-cyan h-full rounded-full transition-all duration-1000" style="width: 80%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Security -->
+                        <div>
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="font-semibold text-elite-bodyText flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-elite-red"></span> Security Audit</span>
+                                <span id="bar-val-s" class="font-mono font-bold text-white bg-elite-red/10 text-elite-red px-1.5 py-0.5 rounded text-[10px] border border-elite-red/15">9/10</span>
+                            </div>
+                            <div class="w-full bg-elite-studio h-2 rounded-full overflow-hidden border border-elite-gutter">
+                                <div id="bar-fill-s" class="bg-elite-red h-full rounded-full transition-all duration-1000" style="width: 90%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Performance -->
+                        <div>
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="font-semibold text-elite-bodyText flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-elite-purple"></span> Performance</span>
+                                <span id="bar-val-p" class="font-mono font-bold text-white bg-elite-purple/10 text-elite-purple px-1.5 py-0.5 rounded text-[10px] border border-elite-purple/15">7/10</span>
+                            </div>
+                            <div class="w-full bg-elite-studio h-2 rounded-full overflow-hidden border border-elite-gutter">
+                                <div id="bar-fill-p" class="bg-elite-purple h-full rounded-full transition-all duration-1000" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Maintainability -->
+                        <div>
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="font-semibold text-elite-bodyText flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-elite-amber"></span> Maintainability</span>
+                                <span id="bar-val-m" class="font-mono font-bold text-white bg-elite-amber/10 text-elite-amber px-1.5 py-0.5 rounded text-[10px] border border-elite-amber/15">9/10</span>
+                            </div>
+                            <div class="w-full bg-elite-studio h-2 rounded-full overflow-hidden border border-elite-gutter">
+                                <div id="bar-fill-m" class="bg-elite-amber h-full rounded-full transition-all duration-1000" style="width: 90%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Readiness -->
+                        <div class="md:col-span-2">
+                            <div class="flex items-center justify-between text-xs mb-1">
+                                <span class="font-semibold text-elite-bodyText flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-elite-green"></span> Production Readiness</span>
+                                <span id="bar-val-r" class="font-mono font-bold text-white bg-elite-green/10 text-elite-green px-1.5 py-0.5 rounded text-[10px] border border-elite-green/15">10/10</span>
+                            </div>
+                            <div class="w-full bg-elite-studio h-2.5 rounded-full overflow-hidden border border-elite-gutter">
+                                <div id="bar-fill-r" class="bg-elite-green h-full rounded-full transition-all duration-1000" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Section Viewers (Sub tabs: Report, Rewrite, Personas) -->
+                <div class="bg-elite-deck border border-elite-gutter rounded-xl shadow-2xl flex flex-col overflow-hidden min-h-[480px]">
+                    <!-- Tab Headers row -->
+                    <div class="bg-elite-studio border-b border-elite-gutter flex p-1 gap-1">
+                        <button onclick="setResultTab('report')" id="tab-btn-report" class="flex-1 py-3 text-xs font-bold tracking-widest uppercase rounded-lg transition-all flex items-center justify-center gap-2 text-white bg-elite-gutter/80 border border-elite-gutter">
+                            <i data-lucide="file-text" class="w-4 h-4 text-elite-cyan"></i> Architect Report
+                        </button>
+                        <button onclick="setResultTab('rewrite')" id="tab-btn-rewrite" class="flex-1 py-3 text-xs font-bold tracking-widest uppercase rounded-lg transition-all flex items-center justify-center gap-2 text-elite-slateLight hover:text-white hover:bg-elite-gutter/30">
+                            <i data-lucide="cpu" class="w-4 h-4 text-elite-purple"></i> AI Rewrite Battle
+                        </button>
+                        <button onclick="setResultTab('personas')" id="tab-btn-personas" class="flex-1 py-3 text-xs font-bold tracking-widest uppercase rounded-lg transition-all flex items-center justify-center gap-2 text-elite-slateLight hover:text-white hover:bg-elite-gutter/30">
+                            <i data-lucide="users-round" class="w-4 h-4 text-elite-teal"></i> Reviewer Sims
+                        </button>
+                    </div>
+
+                    <!-- Inner tab body screens -->
+                    <div class="p-6 overflow-y-auto max-h-[640px]">
+                        
+                        <!-- 1. General Architectural dynamic Report content -->
+                        <div id="tab-content-report" class="prose prose-invert max-w-none text-elite-bodyText text-sm leading-relaxed space-y-4">
+                            <!-- Dynamic Markdown container rendered by Marked.js -->
+                        </div>
+
+                        <!-- 2. Re-write Code Comparison panel -->
+                        <div id="tab-content-rewrite" class="hidden space-y-6">
+                            <div class="bg-elite-studio/50 border border-elite-gutter p-4 rounded-lg flex items-center gap-3">
+                                <i data-lucide="sparkles" class="w-5 h-5 text-elite-purple"></i>
+                                <span class="text-xs text-elite-slateLight">Review and extract structural improvements generated by the AI Senior engine optimized for Cleanliness, Speed, or Enterprise architecture.</span>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- Re-write versions listed dynamically -->
+                                <div class="bg-elite-studio border border-elite-gutter rounded-xl overflow-hidden">
+                                    <div class="bg-elite-deck px-4 py-3 border-b border-elite-gutter flex items-center justify-between">
+                                        <span class="text-xs font-extrabold text-white uppercase flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-elite-cyan"></span> Version A - Cleanest Code</span>
+                                        <button onclick="copyRewriteContent('v-a')" class="text-[10px] text-elite-slateLight hover:text-white border border-elite-gutter bg-elite-studio px-2.5 py-1 rounded transition-all flex items-center gap-1">
+                                            <i data-lucide="copy" class="w-3 h-3"></i> Copy Clean
+                                        </button>
+                                    </div>
+                                    <pre class="p-4 overflow-x-auto text-[11px] font-mono leading-5 text-slate-100 select-all"><code class="language-kotlin" id="rewrite-code-a">// Code compiled inside report...</code></pre>
+                                </div>
+
+                                <div class="bg-elite-studio border border-elite-gutter rounded-xl overflow-hidden">
+                                    <div class="bg-elite-deck px-4 py-3 border-b border-elite-gutter flex items-center justify-between">
+                                        <span class="text-xs font-extrabold text-white uppercase flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-elite-purple"></span> Version B - Fastest Code</span>
+                                        <button onclick="copyRewriteContent('v-b')" class="text-[10px] text-elite-slateLight hover:text-white border border-elite-gutter bg-elite-studio px-2.5 py-1 rounded transition-all flex items-center gap-1">
+                                            <i data-lucide="copy" class="w-3 h-3"></i> Copy Speed
+                                        </button>
+                                    </div>
+                                    <pre class="p-4 overflow-x-auto text-[11px] font-mono leading-5 text-slate-100 select-all"><code class="language-kotlin" id="rewrite-code-b">// Code compiled inside report...</code></pre>
+                                </div>
+
+                                <div class="bg-elite-studio border border-elite-gutter rounded-xl overflow-hidden">
+                                    <div class="bg-elite-deck px-4 py-3 border-b border-elite-gutter flex items-center justify-between">
+                                        <span class="text-xs font-extrabold text-white uppercase flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-elite-green"></span> Version C - Production Enterprise</span>
+                                        <button onclick="copyRewriteContent('v-c')" class="text-[10px] text-elite-slateLight hover:text-white border border-elite-gutter bg-elite-studio px-2.5 py-1 rounded transition-all flex items-center gap-1">
+                                            <i data-lucide="copy" class="w-3 h-3"></i> Copy Enterprise
+                                        </button>
+                                    </div>
+                                    <pre class="p-4 overflow-x-auto text-[11px] font-mono leading-5 text-slate-100 select-all"><code class="language-kotlin" id="rewrite-code-c">// Code compiled inside report...</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Personas Chats simulators list -->
+                        <div id="tab-content-personas" class="hidden space-y-4">
+                            <!-- Simulated Thread items -->
+                            <div class="bg-elite-studio/80 border-l-4 border-elite-cyan bg-slate hover:bg-elite-studio p-4 rounded-r-xl border border-elite-gutter transition-all space-y-2">
+                                <div class="flex items-center gap-2 justify-between">
+                                    <span class="text-white text-xs font-extrabold tracking-wider flex items-center gap-2 uppercase">
+                                        <span class="w-5 h-5 bg-elite-cyan/10 border border-elite-cyan/20 rounded flex items-center justify-center text-[10px] text-elite-cyan font-serif font-black">G</span>
+                                        Google SWE Reviewer
+                                    </span>
+                                    <span class="bg-elite-cyan/10 text-elite-cyan px-2 py-0.5 rounded text-[8px] tracking-widest font-bold font-mono">STRICT / GOOGLE_CODE_STYLE</span>
+                                </div>
+                                <p id="persona-google-msg" class="text-xs leading-relaxed text-elite-bodyText/95 italic p-1">Reviewing formatting constructs, explicit modular patterns, and mock testing wrappers configurations...</p>
+                            </div>
+
+                            <div class="bg-elite-studio/80 border-l-4 border-elite-teal bg-slate hover:bg-elite-studio p-4 rounded-r-xl border border-elite-gutter transition-all space-y-2">
+                                <div class="flex items-center gap-2 justify-between">
+                                    <span class="text-white text-xs font-extrabold tracking-wider flex items-center gap-2 uppercase">
+                                        <span class="w-5 h-5 bg-elite-teal/10 border border-elite-teal/20 rounded flex items-center justify-center text-[10px] text-elite-teal font-serif font-black">C</span>
+                                        Startup CTO
+                                    </span>
+                                    <span class="bg-elite-teal/10 text-elite-teal px-2 py-0.5 rounded text-[8px] tracking-widest font-bold font-mono">VELOCITY_TRADE_OFFS</span>
+                                </div>
+                                <p id="persona-cto-msg" class="text-xs leading-relaxed text-elite-bodyText/95 italic p-1">Ship fast. Keep the deployment vectors lightweight, prioritize early customer loops, and document any tech debt tradeoffs clearly...</p>
+                            </div>
+
+                            <div class="bg-elite-studio/80 border-l-4 border-elite-red bg-slate hover:bg-elite-studio p-4 rounded-r-xl border border-elite-gutter transition-all space-y-2">
+                                <div class="flex items-center gap-2 justify-between">
+                                    <span class="text-white text-xs font-extrabold tracking-wider flex items-center gap-2 uppercase">
+                                        <span class="w-5 h-5 bg-elite-red/10 border border-elite-red/20 rounded flex items-center justify-center text-[10px] text-elite-red font-serif font-black">S</span>
+                                        Security Hunter
+                                    </span>
+                                    <span class="bg-elite-red/10 text-elite-red px-2 py-0.5 rounded text-[8px] tracking-widest font-bold font-mono">MITIGATIONS_REVIEWS</span>
+                                </div>
+                                <p id="persona-hunter-msg" class="text-xs leading-relaxed text-elite-bodyText/95 italic p-1">Scanning memory limits, API hardcoded secrets risks, injection vulnerabilities and race vectors threat loops...</p>
+                            </div>
+
+                            <div class="bg-elite-studio/80 border-l-4 border-elite-amber bg-slate hover:bg-elite-studio p-4 rounded-r-xl border border-elite-gutter transition-all space-y-2">
+                                <div class="flex items-center gap-2 justify-between">
+                                    <span class="text-white text-xs font-extrabold tracking-wider flex items-center gap-2 uppercase">
+                                        <span class="w-5 h-5 bg-elite-amber/10 border border-elite-amber/20 rounded flex items-center justify-center text-[10px] text-elite-amber font-serif font-black">M</span>
+                                        OSS Maintainer
+                                    </span>
+                                    <span class="bg-elite-amber/10 text-elite-amber px-2 py-0.5 rounded text-[8px] tracking-widest font-bold font-mono">SCALABILITY_VERDIR</span>
+                                </div>
+                                <p id="persona-maintainer-msg" class="text-xs leading-relaxed text-elite-bodyText/95 italic p-1">Strict backward-compatibility validations. Documenting classes clearly and exposing decoupled extension points...</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="font-mono text-[9px] font-bold text-elite-slateLight/60 text-center py-6 border-t border-elite-gutter max-w-7xl w-full mx-auto mt-12">
+        <span>© 2026 AI SENIOR ENGINEER CO. ALL REVIEWS SANDBOXED IN CLIENT STORAGE SHELL. POWERED BY GEMINI 3.5 FLASH ENGINE.</span>
+    </footer>
+
+    <!-- MODAL 1: SETTING & API KEY SECURITY MANAGER -->
+    <div id="modal-settings" class="fixed inset-0 bg-elite-bg/85 backdrop-blur-md z-50 flex items-center justify-center p-4 shadow-3xl hidden">
+        <div class="bg-elite-deck border border-elite-gutter max-w-lg w-full rounded-xl overflow-hidden shadow-2xl relative animate-scaleUp">
+            
+            <!-- Top heading -->
+            <div class="px-6 py-5 border-b border-elite-gutter flex items-center justify-between">
+                <div class="flex items-center gap-2 text-white font-black text-md">
+                    <i data-lucide="key-round" class="w-5 h-5 text-elite-cyan"></i> API CRITICAL SECRETS DECK
+                </div>
+                <button onclick="closeSettingsModal()" class="text-elite-slateLight hover:text-white transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6 flex flex-col gap-5">
+                <div class="bg-elite-red/10 border border-elite-red/20 rounded-lg p-3.5 flex gap-3 text-xs text-elite-red leading-relaxed">
+                    <i data-lucide="shield-check" class="w-6 h-6 shrink-0 mt-0.5 text-elite-red animate-pulse"></i>
+                    <div>
+                        <strong class="font-extrabold uppercase block mb-1">CLIENT-SIDE APIS SECURITY WARNING</strong>
+                        <span>Your API Key is kept 100% locally in your personal browser's <code>localStorage</code> sandboxed partition. It is never transmitted to other servers or exposed on public network logs.</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-elite-slateLight uppercase tracking-wider mb-2">Gemini Studio API Key</label>
+                    <div class="relative flex items-center bg-elite-studio border border-elite-gutter rounded-lg focus-within:border-elite-cyan transition-all">
+                        <input type="password" id="input-api-key" placeholder="Paste your AI Studio GEMINI_API_KEY..." class="w-full bg-transparent text-white px-3.5 py-3 text-xs font-mono select-all outline-none">
+                        <button onclick="toggleKeyVisibility()" class="px-3.5 text-elite-slateLight hover:text-white transition-all">
+                            <i data-lucide="eye" class="w-4 h-4" id="eye-icon"></i>
+                        </button>
+                    </div>
+                    <span class="block text-[10px] text-elite-slateLight font-semibold mt-2">Get raw credentials inside the <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-elite-teal hover:underline inline-flex items-center gap-0.5">Google AI Studio API Key Manager <i data-lucide="external-link" class="w-2.5 h-2.5"></i></a> panel.</span>
+                </div>
+
+                <div class="bg-elite-studio p-4 rounded-lg border border-elite-gutter space-y-2">
+                    <strong class="block text-white text-xs font-black tracking-wider uppercase">Alternate Server Environment variables</strong>
+                    <span class="block text-[11px] text-elite-slateLight leading-5">This client also checks Vercel server configs if declared. To skip user prompts on custom builds, you can define <code>GEMINI_API_KEY</code> inside Vercel Dashboard Settings logs.</span>
+                </div>
+            </div>
+
+            <!-- Footer actions -->
+            <div class="bg-elite-studio/50 px-6 py-4 border-t border-elite-gutter flex justify-end gap-3.5">
+                <button onclick="closeSettingsModal()" class="text-xs font-extrabold text-elite-slateLight hover:text-white uppercase transition-all">Dismiss</button>
+                <button onclick="saveApiKey()" class="bg-elite-cyan text-elite-bg text-xs font-black tracking-widest px-6 py-2.5 rounded hover:bg-elite-teal transition-all uppercase">Save Credentials</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL 2: SEARCH HISTORY DIRECTORY (Equivalent of Room Database viewer) -->
+    <div id="modal-history" class="fixed inset-0 bg-elite-bg/85 backdrop-blur-md z-50 flex items-center justify-center p-4 shadow-3xl hidden">
+        <div class="bg-elite-deck border border-elite-gutter max-w-2xl w-full rounded-xl overflow-hidden shadow-2xl relative animate-scaleUp">
+            
+            <div class="px-6 py-5 border-b border-elite-gutter flex items-center justify-between">
+                <div class="flex items-center gap-2 text-white font-black text-md">
+                    <i data-lucide="history" class="w-5 h-5 text-elite-teal"></i> CLIENT AUDIT HISTORY REGISTRY
+                </div>
+                <button onclick="closeHistoryModal()" class="text-elite-slateLight hover:text-white transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Search box and Controls -->
+            <div class="px-6 py-3.5 bg-elite-studio border-b border-elite-gutter flex items-center gap-3">
+                <div class="relative flex-1 bg-elite-deck border border-elite-gutter rounded-lg px-3 py-1.5 flex items-center">
+                    <i data-lucide="search" class="w-4 h-4 text-elite-slateLight shrink-0 mr-2"></i>
+                    <input type="text" id="history-search-input" oninput="renderHistoryList()" placeholder="Search review snippets by title, programming language or content..." class="bg-transparent text-xs text-white w-full outline-none">
+                </div>
+                <button onclick="clearAllHistory()" class="bg-elite-red/10 border border-elite-red/35 hover:bg-elite-red/20 text-xs font-bold text-elite-red px-3 py-2.5 rounded-lg transition-all flex items-center gap-1.5">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Eraser All
+                </button>
+            </div>
+
+            <!-- History log lists -->
+            <div class="p-6 max-h-[380px] overflow-y-auto space-y-3" id="history-items-container">
+                <!-- Log item elements injected dynamically by JavaScript -->
+            </div>
+
+            <div class="bg-elite-studio/50 px-6 py-4 border-t border-elite-gutter flex justify-end">
+                <button onclick="closeHistoryModal()" class="bg-elite-gutter hover:bg-elite-gutter/80 text-white text-xs font-extrabold tracking-widest px-6 py-2.5 rounded transition-all uppercase">Close Directory</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT LOGIC CONTROLLER -->
+    <script>
+        // Constant reviews properties configurations
+        const CRITERIA_REVIEWS = [
+            {
+                id: 'FAANG',
+                desc: 'Strict production rigor & algorithmic analysis',
+                icon: 'star',
+                color: '#9F2BFF',
+                colorClass: 'text-elite-purple',
+                badgeBg: 'bg-elite-purple/10 border-elite-purple/20'
+            },
+            {
+                id: 'Startup CTO',
+                desc: 'Velocity-optimized, shipping metrics, tech-debt tradeoffs',
+                icon: 'zap',
+                color: '#00D1FF',
+                colorClass: 'text-elite-teal',
+                badgeBg: 'bg-elite-teal/10 border-elite-teal/20'
+            },
+            {
+                id: 'Security Hunter',
+                desc: 'Deep vulnerability scanning and injection audits',
+                icon: 'shield-alert',
+                color: '#EF4444',
+                colorClass: 'text-elite-red',
+                badgeBg: 'bg-elite-red/10 border-elite-red/20'
+            },
+            {
+                id: 'Bug Assassin',
+                desc: 'Hunting null safety, concurrent loops, logic traps',
+                icon: 'bug',
+                color: '#FBBF24',
+                colorClass: 'text-elite-amber',
+                badgeBg: 'bg-elite-amber/10 border-elite-amber/20'
+            },
+            {
+                id: 'Beginner Mentor',
+                desc: 'Educational, step-by-step commentary & advice',
+                icon: 'lightbulb',
+                color: '#10B981',
+                colorClass: 'text-elite-green',
+                badgeBg: 'bg-elite-green/10 border-elite-green/20'
+            }
+        ];
+
+        // Demo snippet configurations
+        const TEMPLATES = [
+            {
+                language: 'SQL',
+                projectType: 'Web Service/API',
+                reviewMode: 'Security Hunter',
+                code: `// INSECURE LOGIN LOGIC - DETECT THREAT VECTORS\npublic boolean authenticateUser(String userInput, String passwordInput) throws SQLException {\n    Connection conn = DriverManager.getConnection("jdbc:sqlite:user_registry.db");\n    Statement stmt = conn.createStatement();\n    \n    // ❌ Raw concatenation vulnerability triggering SQL Injection exploits\n    String rawQuery = "SELECT * FROM administrators WHERE user = '" + userInput + "' AND pass = '" + passwordInput + "'";\n    \n    ResultSet rs = stmt.executeQuery(rawQuery);\n    return rs.next();\n}`
+            },
+            {
+                language: 'Kotlin',
+                projectType: 'Android App',
+                reviewMode: 'Bug Assassin',
+                code: `package com.example.unstable\n\nimport android.app.Activity\nimport android.content.Context\nimport android.os.Bundle\n\nclass LeakActivity : Activity() {\n    companion object {\n        // ❌ Static reference pinning context object prevents garbage disposal (Memory Leak!)\n        var globalPersistentContext: Context? = null\n    }\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        globalPersistentContext = this\n    }\n}`
+            },
+            {
+                language: 'Kotlin',
+                projectType: 'Android App',
+                reviewMode: 'FAANG',
+                code: `package com.example.concurrency\n\nimport kotlinx.coroutines.*\n\nclass CollisionRegistry {\n    private var counterState = 0\n\n    // ❌ Simultaneous non-atomic modifications over asynchronous scopes cause state race\n    fun triggerRaceSimulation() {\n        val backgroundScope = CoroutineScope(Dispatchers.Default)\n        repeat(1000) {\n            backgroundScope.launch {\n                delay(1)\n                counterState++\n            }\n        }\n    }\n\n    fun getCount(): Int = counterState\n}`
+            }
+        ];
+
+        // Local state properties variables
+        let state = {
+            apiKey: '',
+            selectedReviewMode: 'FAANG',
+            activeResultTab: 'report',
+            currentReport: null,
+            history: []
+        };
+
+        // Initialize App UI
+        window.addEventListener('DOMContentLoaded', () => {
+            // Load saved config key
+            const storedKey = localStorage.getItem('gemini_api_key') || '';
+            state.apiKey = storedKey;
+            document.getElementById('input-api-key').value = storedKey;
+
+            // Load saved history logs array
+            const storedHistory = localStorage.getItem('elite_review_history');
+            if (storedHistory) {
+                try {
+                    state.history = JSON.parse(storedHistory);
+                } catch (e) {
+                    state.history = [];
+                }
+            }
+
+            // Render Dynamic Workspace items
+            renderReviewOptions();
+            updateApiKeyIndicator();
+            renderHistoryBadge();
+            
+            // Re-render Lucide icons initially
+            lucide.createIcons();
+        });
+
+        // Toggle Key password field view states
+        function toggleKeyVisibility() {
+            const input = document.getElementById('input-api-key');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        // Render Workspace review items options
+        function renderReviewOptions() {
+            const container = document.getElementById('review-modes-container');
+            container.innerHTML = '';
+            
+            CRITERIA_REVIEWS.forEach(mode => {
+                const isActive = state.selectedReviewMode === mode.id;
+                const borderClass = isActive 
+                    ? `border-elite-cyan bg-elite-cyan/5 shadow-[0_0_12px_rgba(0,242,254,0.11)]` 
+                    : 'border-elite-gutter hover:bg-elite-gutter/30';
+                
+                const cardHtml = `
+                    <div id="mode-card-${mode.id}" onclick="selectReviewMode('${mode.id}')" class="flex items-start gap-3 p-3.5 border rounded-lg cursor-pointer transition-all ${borderClass}">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-elite-studio mt-0.5 border border-elite-gutter">
+                            <i data-lucide="${mode.icon}" class="w-4.5 h-4.5 ${mode.colorClass}"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-xs font-bold text-white tracking-wide uppercase flex items-center gap-2">
+                                ${mode.id}
+                                ${isActive ? `<span class="w-1.5 h-1.5 rounded-full bg-elite-cyan animate-ping"></span>` : ''}
+                            </h4>
+                            <p class="text-[10px] text-elite-slateLight mt-0.5 leading-4 font-semibold">${mode.desc}</p>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+            lucide.createIcons();
+        }
+
+        function selectReviewMode(modeId) {
+            state.selectedReviewMode = modeId;
+            renderReviewOptions();
+        }
+
+        // Update settings modal keys saving status
+        function updateApiKeyIndicator() {
+            const btn = document.getElementById('key-status-btn');
+            const label = document.getElementById('key-status-label');
+            
+            if (state.apiKey && state.apiKey.trim().length > 10) {
+                btn.className = "flex items-center gap-2 bg-elite-green/10 hover:bg-elite-green/15 text-xs font-semibold px-4 py-2 border border-elite-green/30 rounded-lg text-elite-green transition-all cursor-pointer";
+                label.innerText = "API Key: Active";
+            } else {
+                btn.className = "flex items-center gap-2 bg-elite-red/10 hover:bg-elite-red/15 text-xs font-semibold px-4 py-2 border border-elite-red/30 rounded-lg text-elite-red transition-all cursor-pointer";
+                label.innerText = "API Key: Secure Input Required";
+            }
+        }
+
+        function renderHistoryBadge() {
+            document.getElementById('history-badge').innerText = state.history.length;
+        }
+
+        // Save keys inside browser locally
+        function saveApiKey() {
+            const key = document.getElementById('input-api-key').value.trim();
+            state.apiKey = key;
+            localStorage.setItem('gemini_api_key', key);
+            updateApiKeyIndicator();
+            closeSettingsModal();
+        }
+
+        // Load predefined Demos templates
+        function loadTemplate(index) {
+            const template = TEMPLATES[index];
+            if (!template) return;
+            
+            document.getElementById('select-language').value = template.language;
+            document.getElementById('select-project-type').value = template.projectType;
+            state.selectedReviewMode = template.reviewMode;
+            document.getElementById('code-terminal').value = template.code;
+            
+            renderReviewOptions();
+        }
+
+        // Wipe Workspace code configurations
+        function clearWorkspace() {
+            document.getElementById('code-terminal').value = '';
+            document.getElementById('select-language').value = 'Kotlin';
+            document.getElementById('select-project-type').value = 'Android App';
+            state.selectedReviewMode = 'FAANG';
+            renderReviewOptions();
+        }
+
+        function openSettingsModal() {
+            document.getElementById('modal-settings').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('modal-settings').classList.add('hidden');
+        }
+
+        function openHistoryModal() {
+            document.getElementById('modal-history').classList.remove('hidden');
+            renderHistoryList();
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('modal-history').classList.add('hidden');
+        }
+
+        // Render Room-Equivalent history logs list modal
+        function renderHistoryList() {
+            const container = document.getElementById('history-items-container');
+            const searchVal = document.getElementById('history-search-input').value.toLowerCase().trim();
+            container.innerHTML = '';
+
+            const filteredHistory = state.history.filter(item => {
+                return item.title.toLowerCase().includes(searchVal) || 
+                       item.language.toLowerCase().includes(searchVal) || 
+                       item.reviewMode.toLowerCase().includes(searchVal) ||
+                       item.codeSnippet.toLowerCase().includes(searchVal);
+            });
+
+            if (filteredHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 text-elite-slateLight">
+                        <i data-lucide="archive-x" class="w-8 h-8 mx-auto mb-2 text-elite-slateLight/60"></i>
+                        <span class="text-xs">No historical reviews match search filter query logs...</span>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filteredHistory.forEach((item, index) => {
+                const date = new Date(item.timestamp).toLocaleString();
+                const scoreColor = item.score >= 8.5 ? 'text-elite-green bg-elite-green/10' : 
+                                   item.score >= 6.5 ? 'text-elite-amber bg-elite-amber/10' : 'text-elite-red bg-elite-red/10';
+                
+                const itemHtml = `
+                    <div class="bg-elite-studio p-4 border border-elite-gutter rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-elite-teal/40 transition-all">
+                        <div class="cursor-pointer flex-1" onclick="loadSavedReview(${item.timestamp})">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-extrabold text-white uppercase">${item.title}</span>
+                                <span class="bg-elite-gutter px-2 py-0.5 rounded text-[8.5px] font-mono text-elite-slateLight">${item.language}</span>
+                            </div>
+                            <span class="block text-[10.5px] text-elite-slateLight font-semibold mt-1 font-mono">${date}</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-elite-gutter/60 pt-3 md:pt-0">
+                            <!-- Overall Score Badge indicator -->
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold text-elite-slateLight tracking-wide uppercase hidden sm:inline">Score:</span>
+                                <span class="px-2 py-1 rounded font-black font-mono text-xs ${scoreColor}">
+                                    ${Number(item.score).toFixed(1)}
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <button onclick="loadSavedReview(${item.timestamp})" class="bg-elite-teal/10 hover:bg-elite-teal/15 text-xs font-bold text-elite-teal border border-elite-teal/20 px-3 py-1.5 rounded transition-all">Load</button>
+                                <button onclick="deleteHistoryItem(${item.timestamp}, event)" class="text-elite-slateLight hover:text-elite-red border border-elite-gutter hover:border-elite-red/20 hover:bg-elite-red/10 p-2 rounded transition-all">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += itemHtml;
+            });
+            lucide.createIcons();
+        }
+
+        // Delete item trace by key timestamp in database
+        function deleteHistoryItem(timestamp, event) {
+            event.stopPropagation();
+            state.history = state.history.filter(x => x.timestamp !== timestamp);
+            localStorage.setItem('elite_review_history', JSON.stringify(state.history));
+            renderHistoryList();
+            renderHistoryBadge();
+        }
+
+        // Eraser all logs
+        function clearAllHistory() {
+            if (confirm("Reset current audit database logs indices entirely? This operation is persistent!")) {
+                state.history = [];
+                localStorage.removeItem('elite_review_history');
+                renderHistoryList();
+                renderHistoryBadge();
+                location.reload();
+            }
+        }
+
+        // Set Results viewer visual tabs
+        function setResultTab(tabId) {
+            state.activeResultTab = tabId;
+            const tabs = ['report', 'rewrite', 'personas'];
+            
+            tabs.forEach(tab => {
+                const btn = document.getElementById(`tab-btn-${tab}`);
+                const body = document.getElementById(`tab-content-${tab}`);
+                
+                if (tab === tabId) {
+                    btn.className = "flex-1 py-3 text-xs font-bold tracking-widest uppercase rounded-lg transition-all flex items-center justify-center gap-2 text-white bg-elite-gutter/80 border border-elite-gutter";
+                    body.classList.remove('hidden');
+                } else {
+                    btn.className = "flex-1 py-3 text-xs font-bold tracking-widest uppercase rounded-lg transition-all flex items-center justify-center gap-2 text-elite-slateLight hover:text-white hover:bg-elite-gutter/30";
+                    body.classList.add('hidden');
+                }
+            });
+        }
+
+        // Load specific logs back to panels
+        function loadSavedReview(timestamp) {
+            const review = state.history.find(x => x.timestamp === timestamp);
+            if (!review) return;
+
+            state.currentReport = review;
+            closeHistoryModal();
+            displayResults(review);
+        }
+
+        // Dynamic Loading progres stage animation loop
+        async function runProgressAnimation(language, projectType, reviewMode) {
+            const steps = [
+                "Initializing Elite Review Deck...",
+                `Hashing abstract syntax tree for ${language}...`,
+                `Analyzing patterns in ${projectType} configuration...`,
+                `Aligning criteria with ${reviewMode} standards...`,
+                "Executing security vulnerability audits...",
+                "Evaluating Big-O time and space complexity...",
+                "Synthesizing alternate refactor versions...",
+                "Polishing Developer DNA & Reviewer profiles..."
+            ];
+
+            const indicator = document.getElementById('progress-indicator-text');
+            let idx = 0;
+            
+            // Loop sequence
+            const intervalId = setInterval(() => {
+                indicator.innerText = steps[idx];
+                idx = (idx + 1) % steps.length;
+            }, 1800);
+
+            return intervalId;
+        }
+
+        // Execute API payload connection
+        async function triggerCodeReview() {
+            const code = document.getElementById('code-terminal').value.trim();
+            const language = document.getElementById('select-language').value;
+            const projType = document.getElementById('select-project-type').value;
+            const mode = state.selectedReviewMode;
+
+            if (code.length === 0) {
+                alert("Please enter or paste some code snippet block first!");
+                return;
+            }
+
+            // Check keys available
+            if (!state.apiKey || state.apiKey.trim().length === 0) {
+                openSettingsModal();
+                alert("An active AI Studio Gemini API Key is required to compile results. Please paste your Key in the Settings module panel.");
+                return;
+            }
+
+            // Hide Idle / Results and show loader
+            document.getElementById('panel-idle').classList.add('hidden');
+            document.getElementById('panel-results').classList.add('hidden');
+            document.getElementById('panel-loading').classList.remove('hidden');
+
+            const animationInterval = await runProgressAnimation(language, projType, mode);
+
+            try {
+                // Build robust prompts matching ViewModel system instructs
+                const systemPrompt = `You are "AI Senior Engineer", an elite autonomous code review system that combines the skills of:
+- Senior Software Architect
+- Security Engineer
+- Performance Optimizer
+- DevOps Reviewer
+- Clean Code Mentor
+- FAANG Interview Reviewer
+- Bug Prediction Specialist
+
+Your objective is to perform a brutally accurate, highly technical, and deeply insightful code review report.
+Adhere strictly to the requested structure. You MUST output your responses in clean Markdown layout.
+
+At the very beginning of your response, you MUST output a raw score block in this exact tag format, replacing key variables with integer scores out of 10:
+[SCORES]
+Code Quality: <integer>
+Security: <integer>
+Performance: <integer>
+Maintainability: <integer>
+Production Readiness: <integer>
+[END_SCORES]
+
+After this score block, write the full report in beautiful markdown layout:
+
+# AI CODE REVIEW REPORT
+
+## 1. Executive Summary
+Provide a concise high-level summary of Code Quality, Security level, Performance quality, Maintainability, and Production readiness. Explain the overall architectural viability.
+
+## 2. Critical Issues
+List severe problems, logic bugs, or memory regressions first.
+For each critical issue discovered, format as follows:
+### Issue #1: <title>
+- **Severity**: Critical / High / Medium / Low
+- **Why It Matters**: <explanation>
+- **Real-World Risk**: <real danger>
+- **Suggested Fix**: 
+\`\`\`${language}
+<fix code>
+\`\`\`
+
+## 3. Security Audit
+Audit for SQL injection, XSS, CSRF, hardcoded secrets, unsafe deserialization, authentication/authorization flaws, and API exposure risks. Detailed attack scenario and mitigation.
+
+## 4. Performance Analysis
+Analyze time complexity, space complexity, redundant operations, and blocking calls. State the Big-O metrics clearly.
+
+## 5. Code Smells & Maintainability
+Explain architectural Coupling, Long functions, Dead code, Overengineering, or naming smells.
+
+## 6. Hidden Bug Prediction
+Predict possible future failures (concurrency races, null pointer crashes, overflow risks, edge-case crashes). Note the trigger condition and damage level.
+
+## 7. AI Rewrite Battle
+Provide three polished rewrites:
+### Version A — Cleanest Code
+Focus on readability and maintainability. Include brief comment explaining trade-offs.
+### Version B — Fastest Code
+Focus on speed, memory efficiency, and optimal Big-O complexity. Note trade-offs.
+### Version C — Production Enterprise Version
+Focus on scalability, modularity, type-safety, and production-ready industry patterns.
+
+## 8. Developer DNA Analysis
+Evaluate the developer's coding profile: Coding strengths, weaknesses, thinking patterns, and engineering maturity level (Junior, Mid, Senior, Tech Lead, Staff).
+
+## 9. Human Reviewer Simulation
+Simulate reviews from different personas:
+- **Google Swe Reviewer**: <strictly adheres to clean code, testing, and formatting standards>
+- **Startup CTO**: <pragmatic, focused on shipping rate, tech-debt trade-offs, and scaling bottlenecks>
+- **Security Hunter**: <focuses exclusively on threat vector, credentials safety, and injection risks>
+- **OSS Maintainer**: <evaluates backwards-compatibility, documentation, and extensibility>
+
+## 10. Final Verdict
+Review summary recommendation, and critical fixes checklist required before deployment.`;
+
+                const promptText = `Programming Language: ${language}
+Project Type: ${projType}
+Review Mode: ${mode}
+
+Code to Review:
+\`\`\`${language}
+${code}
+\`\`\`\n`;
+
+                // Build Direct REST payload
+                const payload = {
+                    contents: [{ parts: [{ text: promptText }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                    generationConfig: { temperature: 0.2 }
+                };
+
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${state.apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errBody = await response.json().catch(() => ({}));
+                    throw new Error(errBody.error?.message || `Network transmission exception ${response.status}`);
+                }
+
+                const data = await response.json();
+                const rawReport = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!rawReport) {
+                    throw new Error("Unable to parse a valid candidate text stream from Gemini network API.");
+                }
+
+                // Extrapolate scores indices and build reports objects
+                const parsedScores = parseScoresFromText(rawReport);
+                const cleanReport = cleanReportText(rawReport);
+                const overallScore = (parsedScores.codeQuality + parsedScores.security + parsedScores.performance + parsedScores.maintainability + parsedScores.readiness) / 5;
+
+                const completedReview = {
+                    title: `${language} ${projType} (${mode})`,
+                    language: language,
+                    projectType: projType,
+                    reviewMode: mode,
+                    codeSnippet: code,
+                    reportContent: cleanReport,
+                    score: overallScore,
+                    scoresDetail: parsedScores, // codeQuality, security, performance, maintainability, readiness
+                    timestamp: Date.now()
+                };
+
+                // Push and Save locally to Room counterparts
+                state.history.unshift(completedReview);
+                localStorage.setItem('elite_review_history', JSON.stringify(state.history));
+                renderHistoryBadge();
+
+                // Display
+                displayResults(completedReview);
+
+            } catch (e) {
+                console.error(e);
+                alert(`Review Failed: ${e.message}`);
+                document.getElementById('panel-idle').classList.remove('hidden');
+                document.getElementById('panel-results').classList.add('hidden');
+            } finally {
+                clearInterval(animationInterval);
+                document.getElementById('panel-loading').classList.add('hidden');
+            }
+        }
+
+        // Extrapolate integer ratings from Markdown structures
+        function parseScoresFromText(text) {
+            let q = 8, s = 8, p = 8, m = 8, r = 8;
+            try {
+                const startTag = "[SCORES]";
+                const endTag = "[END_SCORES]";
+                if (text.includes(startTag) && text.includes(endTag)) {
+                    const startIdx = text.indexOf(startTag) + startTag.length;
+                    const endIdx = text.indexOf(endTag);
+                    const block = text.substring(startIdx, endIdx);
+                    
+                    block.split('\n').forEach(line => {
+                        const cleanLine = line.trim();
+                        if (cleanLine.includes(':')) {
+                            const key = cleanLine.split(':')[0].trim().toLowerCase();
+                            const val = parseInt(cleanLine.split(':')[1].trim()) || 8;
+                            
+                            if (key.includes('quality')) q = val;
+                            else if (key.includes('security')) s = val;
+                            else if (key.includes('performance')) p = val;
+                            else if (key.includes('maintainability')) m = val;
+                            else if (key.includes('readiness')) r = val;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.warn("Scores parsing error", e);
+            }
+            return { codeQuality: q, security: s, performance: p, maintainability: m, readiness: r };
+        }
+
+        // Clean score metadata from raw report text
+        function cleanReportText(text) {
+            const startTag = "[SCORES]";
+            const endTag = "[END_SCORES]";
+            if (text.includes(startTag) && text.includes(endTag)) {
+                const startIdx = text.indexOf(startTag);
+                const endIdx = text.indexOf(endTag) + endTag.length;
+                return (text.slice(0, startIdx) + text.slice(endIdx)).trim();
+            }
+            return text.trim();
+        }
+
+        // Load active result items into visual report views
+        function displayResults(review) {
+            // Un-hide results
+            document.getElementById('panel-idle').classList.add('hidden');
+            document.getElementById('panel-loading').classList.add('hidden');
+            document.getElementById('panel-results').classList.remove('hidden');
+
+            // Render Title & details
+            document.getElementById('result-title').innerText = review.title;
+            document.getElementById('result-meta-mode').innerText = `${review.reviewMode} REVIEW MODE`;
+            document.getElementById('result-timestamp').innerText = `Timestamp log: ${new Date(review.timestamp).toLocaleString()}`;
+            
+            // Circular overall value meter
+            const totalVal = Number(review.score).toFixed(1);
+            document.getElementById('score-meter-text').innerText = totalVal;
+            
+            // Description mapping depending on scores limits
+            let desc = "Enterprise Ready";
+            if (review.score < 5.0) desc = "Refactor Required";
+            else if (review.score < 7.5) desc = "Pragmatic Draft";
+            else if (review.score < 9.0) desc = "FAANG Rigged";
+            document.getElementById('score-description').innerText = desc;
+
+            // Rating indicators parsing
+            const scores = review.scoresDetail || { codeQuality: 8, security: 8, performance: 8, maintainability: 8, readiness: 8 };
+            
+            // Progress fills UI updates
+            const metrics = [
+                { id: 'q', val: scores.codeQuality },
+                { id: 's', val: scores.security },
+                { id: 'p', val: scores.performance },
+                { id: 'm', val: scores.maintainability },
+                { id: 'r', val: scores.readiness }
+            ];
+
+            metrics.forEach(m => {
+                document.getElementById(`bar-val-${m.id}`).innerText = `${m.val}/10`;
+                document.getElementById(`bar-fill-${m.id}`).style.width = `${m.val * 10}%`;
+            });
+
+            // Convert markdown files to standard HTML strings
+            const htmlReport = marked.parse(review.reportContent);
+            document.getElementById('tab-content-report').innerHTML = htmlReport;
+
+            // Extrapolate Code snippets inside markdown blocks for Rewrite battle comparisons tabs
+            extractRewriteCodes(review.reportContent);
+
+            // Extrapolate simulated reviewer persona messages from markup response
+            extractPersonaSimulations(review.reportContent);
+
+            // Reset Tab views to dynamic formatted Report markup initially
+            setResultTab('report');
+            
+            // Highlight Prism codes inside container
+            Prism.highlightAll();
+        }
+
+        // Extrapolate simulated personas from markdown
+        function extractPersonaSimulations(markdown) {
+            const googleMsg = document.getElementById('persona-google-msg');
+            const ctoMsg = document.getElementById('persona-cto-msg');
+            const hunterMsg = document.getElementById('persona-hunter-msg');
+            const maintainerMsg = document.getElementById('persona-maintainer-msg');
+
+            // Set default simulated text
+            googleMsg.innerText = "Adhere to standard Pascal/Camel casing and provide extensive unit testing coverages structures.";
+            ctoMsg.innerText = "Keep the architecture pragmatic. Priority on early shipment speed and velocity tradeoff balances.";
+            hunterMsg.innerText = "Confirm memory checks and sanitise outer inputs arrays to protect API exposures threat vectors.";
+            maintainerMsg.innerText = "Keep interfaces decoupled and confirm backward binary compatibility over public scopes.";
+
+            try {
+                // Parse lines to locate simulated sections
+                let currentFinder = '';
+                markdown.split('\n').forEach(line => {
+                    const clean = line.trim().toLowerCase();
+                    if (clean.includes('google swe reviewer') || clean.includes('google reviewer')) {
+                        googleMsg.innerText = line.replace(/^\s*-\s*\*\*?[^*]+\*\*?:?/i, '').trim();
+                    } else if (clean.includes('startup cto')) {
+                        ctoMsg.innerText = line.replace(/^\s*-\s*\*\*?[^*]+\*\*?:?/i, '').trim();
+                    } else if (clean.includes('security hunter')) {
+                        hunterMsg.innerText = line.replace(/^\s*-\s*\*\*?[^*]+\*\*?:?/i, '').trim();
+                    } else if (clean.includes('oss maintainer')) {
+                        maintainerMsg.innerText = line.replace(/^\s*-\s*\*\*?[^*]+\*\*?:?/i, '').trim();
+                    }
+                });
+            } catch (e) {
+                console.warn("Persona extraction exception", e);
+            }
+        }
+
+        // Parse and isolate code fragments from AI rewriting section markup
+        function extractRewriteCodes(markdown) {
+            const codeBoxA = document.getElementById('rewrite-code-a');
+            const codeBoxB = document.getElementById('rewrite-code-b');
+            const codeBoxC = document.getElementById('rewrite-code-c');
+
+            // Set backups
+            codeBoxA.innerText = "// Version A: Clean Code refactor compiles during execution review...";
+            codeBoxB.innerText = "// Version B: Highly optimized speedy iteration refactors compiled during execution reviews...";
+            codeBoxC.innerText = "// Version C: Modular industrial type-safe Enterprise code patterns compiles during reviews...";
+
+            try {
+                // Simple regex block finder loops
+                const codeRegex = /```[\w]*\n([\s\S]*?)```/g;
+                let matches = [];
+                let match;
+                while ((match = codeRegex.exec(markdown)) !== null) {
+                    matches.push(match[1]);
+                }
+
+                // Sort out rewriting loops from the overall reports markdown files (usually situated inside sections 7 and 2)
+                if (matches.length >= 3) {
+                    // Match rewriting battles usually located towards the latter third sections inside templates logs
+                    const rewrites = matches.slice(-3);
+                    codeBoxA.innerText = rewrites[0].trim();
+                    codeBoxB.innerText = rewrites[1].trim();
+                    codeBoxC.innerText = rewrites[2].trim();
+                } else if (matches.length > 0) {
+                    codeBoxA.innerText = matches[0].trim();
+                    if (matches[1]) codeBoxB.innerText = matches[1].trim();
+                    if (matches[2]) codeBoxC.innerText = matches[2].trim();
+                }
+            } catch (e) {
+                console.warn("Code snippets extraction exception", e);
+            }
+        }
+
+        // Clipboard copying actions helper
+        function copyRewriteContent(buttonId) {
+            let targetId = 'rewrite-code-a';
+            if (buttonId === 'v-b') targetId = 'rewrite-code-b';
+            else if (buttonId === 'v-c') targetId = 'rewrite-code-c';
+            
+            const textText = document.getElementById(targetId).innerText;
+            navigator.clipboard.writeText(textText).then(() => {
+                alert("Refactored rewrite snippet copied to clipboard clipboard securely!");
+            }).catch(e => {
+                alert("Copy failure. Please select and copy text segments manually.");
+            });
+        }
+    </script>
+</body>
+</html>
